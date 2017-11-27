@@ -43,7 +43,7 @@ int main() {
 	thread t1(task_inc);
 	thread t2(task_dec);
 
-	//hit ctrl-f11 in debug see that the following
+	//in disassembly view the following line
 	//equals 3 assembly instructions, interrupt can
 	//happen after any of those three
 	//imaglobal++;
