@@ -6,32 +6,31 @@
  */
 #include <string>
 #include <iostream>
-#include <thread>
 #include <atomic>
 
+#include <thread>
+
 using namespace std;
-const int FIVE_MILLION = 5000000;
+const int NUMB_TIMES = 100000;
 
 //global variable
-int global2 = 0;
+//int global2 = 0;
 
 //atomic variable
-std::atomic<int> atomicglobal(0);
+std::atomic<int> global2(0);
 
 //thread functions
 void task_dec() {
 	//decrement
-	for (int i = 0; i < FIVE_MILLION; i++) {
+	for (int i = 0; i < NUMB_TIMES; i++) {
 		global2--;	//this one statement is the critical section
-		atomicglobal--;
 	}
 }
 
 void task_inc() {
 	//increment
-	for (int i = 0; i < FIVE_MILLION; i++) {
+	for (int i = 0; i < NUMB_TIMES; i++) {
 		global2++;	//this one statement is the critical section
-		atomicglobal++;
 	}
 }
 
@@ -42,11 +41,11 @@ int main() {
 	// constructs 2 threads and runs
 	thread t1(task_inc);
 	thread t2(task_dec);
-
 	//in disassembly view the following line
 	//equals 3 assembly instructions, interrupt can
 	//happen after any of those three
-	//imaglobal++;
+	//global2++;
+
 
 	// Makes the main thread wait for the new thread to finish execution, therefore blocks its own execution.
 	t1.join();
@@ -54,7 +53,6 @@ int main() {
 
 	std::cout << "Value of global      :" << global2 << " it should be 0"
 			<< std::endl;
-	std::cout << "Value of atomicglobal:" << atomicglobal << " it should be 0"
-			<< std::endl;
+
 }
 
